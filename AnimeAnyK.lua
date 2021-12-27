@@ -1,4 +1,5 @@
 -- Tested on Anime4K version v4.0
+-- Use namespace "_jbgyampcwu" to avoid possible conflicts
 --
 -- Automatically turn on Anime4K depending on video resolution
 -- 2160P: Ignore, or send user command
@@ -9,7 +10,7 @@
 
 
 --require 'mp.msg'
-function myFileLoadedEvent(event)
+function videoLoadedEvent_jbgyampcwu(event)
     --
     -- BEGIN User input
     --
@@ -187,7 +188,7 @@ function myFileLoadedEvent(event)
     --
 end
 
-function runFuntionButDelay(myTime, myFunction)
+function runFuntionButDelay_jbgyampcwu(myTime, myFunction)
     mp.add_timeout
     (
         myTime,
@@ -197,4 +198,4 @@ function runFuntionButDelay(myTime, myFunction)
     )
 end
 
-mp.register_event("file-loaded", myFileLoadedEvent)
+mp.register_event("file-loaded", videoLoadedEvent_jbgyampcwu)
