@@ -40,8 +40,8 @@ function getIndicatorFileStatus_jbgyampcwu()
     end
 end
 
--- Video loaded event
-function videoLoadedEvent_jbgyampcwu(event)
+-- Send Anime4K command to mpv
+function sendAnime4kCommand_jbgyampcwu()
     --
     -- BEGIN User input
     --
@@ -70,22 +70,6 @@ function videoLoadedEvent_jbgyampcwu(event)
 
     --
     -- End User input
-    --
-
-
-
-    --
-    -- BEGIN Check indicator file
-    --
-
-    local indicatorFileExist, _ = getIndicatorFileStatus_jbgyampcwu()
-    if indicatorFileExist == false
-    then
-        return
-    end
-
-    --
-    -- END Check indicator file
     --
 
 
@@ -236,6 +220,17 @@ function videoLoadedEvent_jbgyampcwu(event)
     --
 end
 
+-- Video loaded event
+function videoLoadedEvent_jbgyampcwu(event)
+    local indicatorFileExist, _ = getIndicatorFileStatus_jbgyampcwu()
+    if indicatorFileExist == false
+    then
+        return
+    else
+        sendAnime4kCommand_jbgyampcwu()
+    end
+end
+
 -- Toggle on/off event
 function inputCommandEvent_jbgyampcwu()
     -- Get indicator file status
@@ -245,13 +240,15 @@ function inputCommandEvent_jbgyampcwu()
     then
         -- Create file
         local file_object = io.open(indicatorFileFullPath, 'a')
-        file_object:close();
+
+        -- Ignore possible close error (happens on read only file system)
+        local closeResult, err = pcall(function () file_object:close() end)
 
         -- Trigger scripted Anime4K
-        videoLoadedEvent_jbgyampcwu()
+        sendAnime4kCommand_jbgyampcwu()
     else
-        -- Delete exist file
-        os.remove(indicatorFileFullPath)
+        -- Delete exist file, ignore possible delete error (happens on read only file system)
+        local deleteResult, err = pcall(function () os.remove(indicatorFileFullPath) end)
 
         -- Clear glsl
         mp.command("no-osd change-list glsl-shaders clr \"\"; show-text \"GLSL shaders cleared\"")
