@@ -1,4 +1,4 @@
--- Tested on Anime4K version v4.0
+-- Tested on Anime4K version v4.0 and mpv-x86_64-20211219-git-fd63bf3
 -- Use namespace "_jbgyampcwu" to avoid possible conflicts
 --
 -- Automatically turn on Anime4K depending on video resolution
