@@ -2,7 +2,9 @@
 
 # AnimeAnyK-mpv
 
-Automatically enable Anime4K in mpv player depending on video resolution.
+Automatically turn on Anime4K in mpv player depending on video resolution.  
+Customize Anime4K command.  
+Remember Anime4K on/off status for other videos in the same folder.
 
 ## How to use
 
@@ -19,27 +21,41 @@ mpv\shaders\Anime4K_AutoDownscalePre_x4.glsl
 ...and many other
 ```
 
-play any video and the script should work properly.  
-To customize, use any text editor change variables inside "User input" section.
+Add the following line to `mpv\input.conf`:
 
-### Confirm script is working
+```
+CTRL+7 script-binding toggle-anime4k-jbgyampcwu
+```
+
+This is a custom key binding, you can replace `CTRL+7` with any customizations.  
+By default, AnimeAnyK doesn't bind any key to avoid potential conflicts.
+
+### Toggle Anime4K on/off
+
+Open a video, press the bound key to trigger the "toggle" command,  
+this will enable Anime4K, and create an indicator file in the folder where the video is stored.  
+Then open any other video inside the same folder will enable Anime4K automatically.
+
+Press the same key again, indicator file will be deleted  
+and use Anime4K official command to clear GLSL shaders.
+
+Without the indicator file,  
+AnimeAnyK won't do anything to prevent enabling Anime4K on non-anime videos.
+
+### Custom Anime4K
+
+To customize Anime4K, use any text editor open the ".lua" file,  
+change variables inside "User input" section.
+
+Once `useUserInputCommand` set to `true`,  
+AnimeAnyK will use user commands to replace built-in Anime4K commands.
+
+### Confirm Anime4K enabled by script
 
 Open a video, then drag the same video into mpv player window,  
 OSD will show "Anime4K: Scripted A/B/C" on the top left corner.
 
-## Features
-
-### From 1440P to 480P
-
-The script can send the auto-generated command to enable Anime4K.  
-It's possible to customize shader quality (S, M, L, etc).  
-If video is greater than or equal to 2160P it's ignored, Anime4K won't enable.
-
-### From 2160P to 480P
-
-The script can send user-specified commands to mpv depending on video resolution.  
-This command string is fully under user control,  
-so it's possible to customize Anime4K or even any mpv commands.
+## Other
 
 ### Auto generate logic
 

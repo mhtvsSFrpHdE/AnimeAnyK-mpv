@@ -1,4 +1,4 @@
--- Tested on Anime4K version v4.0
+-- Tested on Anime4K version v4.0 and mpv-x86_64-20211219-git-fd63bf3
 --
 -- Automatically turn on Anime4K depending on video resolution
 -- 2160P: Ignore, or send user command
@@ -6,10 +6,42 @@
 -- 720P ~ under 1080P: Mode B
 -- Under 720P: Mode C
 
+-- Use namespace "_jbgyampcwu" to avoid possible conflicts
+-- Rely on mp.utils functions, they may be removed in future mpv versions
 
 
---require 'mp.msg'
-function myFileLoadedEvent(event)
+
+-- Return indicator file exist or not, and indicator file full path
+--
+-- Return value:
+--     bool: indicatorFileExist
+--     string: indicatorFileFullPath
+function getIndicatorFileStatus_jbgyampcwu()
+    -- Require
+    local mpUtils = require 'mp.utils'
+
+    -- Const
+    local indicatorFileName = "Anime4K_jbgyampcwu.i"
+
+    -- Get file path
+    local fileName = mp.get_property("path")
+    local fileParentFolder, _ = mpUtils.split_path(fileName)
+
+    -- Fill parent folder
+    local indicatorFileFullPath = mpUtils.join_path(fileParentFolder, indicatorFileName)
+
+    -- Try indicator file exist
+    local indicatorFileExist, _ = mpUtils.file_info(indicatorFileFullPath)
+    if indicatorFileExist == nil
+    then
+        return false, indicatorFileFullPath
+    else
+        return true, indicatorFileFullPath
+    end
+end
+
+-- Video loaded event
+function videoLoadedEvent_jbgyampcwu(event)
     --
     -- BEGIN User input
     --
@@ -37,6 +69,22 @@ function myFileLoadedEvent(event)
 
     --
     -- End User input
+    --
+
+
+
+    --
+    -- BEGIN Check indicator file
+    --
+
+    local indicatorFileExist, _ = getIndicatorFileStatus_jbgyampcwu()
+    if indicatorFileExist == false
+    then
+        return
+    end
+
+    --
+    -- END Check indicator file
     --
 
 
@@ -187,7 +235,32 @@ function myFileLoadedEvent(event)
     --
 end
 
-function runFuntionButDelay(myTime, myFunction)
+-- Toggle on/off event
+function inputCommandEvent_jbgyampcwu()
+    -- Get indicator file status
+    local indicatorFileExist, indicatorFileFullPath = getIndicatorFileStatus_jbgyampcwu()
+
+    if indicatorFileExist == false
+    then
+        -- Create file
+        local file_object = io.open(indicatorFileFullPath, 'a')
+        file_object:close();
+
+        -- Trigger scripted Anime4K
+        videoLoadedEvent_jbgyampcwu()
+    else
+        -- Delete exist file
+        os.remove(indicatorFileFullPath)
+
+        -- Clear glsl
+        mp.command("no-osd change-list glsl-shaders clr \"\"; show-text \"GLSL shaders cleared\"")
+    end
+end
+
+-- Delay some code executing
+-- May useful when OSD messaging
+-- https://github.com/mpv-player/mpv/issues/6592
+function runFuntionButDelay_jbgyampcwu(myTime, myFunction)
     mp.add_timeout
     (
         myTime,
@@ -197,4 +270,5 @@ function runFuntionButDelay(myTime, myFunction)
     )
 end
 
-mp.register_event("file-loaded", myFileLoadedEvent)
+mp.register_event("file-loaded", videoLoadedEvent_jbgyampcwu)
+mp.add_key_binding(nil, "toggle-anime4k-jbgyampcwu", inputCommandEvent_jbgyampcwu)
