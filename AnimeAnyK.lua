@@ -60,9 +60,10 @@ function videoLoadedEvent_jbgyampcwu(event)
     -- Anime4K profile preset
     -- See "Best Practices" section
     -- https://github.com/bloc97/Anime4K/blob/master/GLSL_Instructions.md
-    local restoreCnnQuality = "S"
+    local restoreCnnQuality = "M"
     local restoreCnnSoftQuality = "S"
-    local upscaleCnnX2Quality = "S"
+    local upscaleCnnX2Quality = "M"
+    local upscaleCnnX2ndQuality = "S"
     local upscaleDenoiseCnnX2Quality = "S"
 
     local useClampHighlights = true
@@ -110,12 +111,12 @@ function videoLoadedEvent_jbgyampcwu(event)
     -- Generate Anime4K command
 
     -- Primary mode combinations
-    local modeACommand = restoreCnnPath .. upscaleCnnX2Path .. autoDownscalePreX2Path .. autoDownscalePreX4Path .. upscaleCnnX2Path
-    local modeBCommand = restoreCnnSoftPath .. upscaleCnnX2Path .. autoDownscalePreX2Path .. autoDownscalePreX4Path .. upscaleCnnX2Path
-    local modeCCommand = upscaleDenoiseCnnX2Path .. autoDownscalePreX2Path .. autoDownscalePreX4Path .. upscaleCnnX2Path
-    local modeAACommand = restoreCnnPath .. upscaleCnnX2Path .. restoreCnnPath .. autoDownscalePreX2Path .. autoDownscalePreX4Path .. upscaleCnnX2Path
-    local modeBBCommand = restoreCnnSoftPath .. upscaleCnnX2Path .. autoDownscalePreX2Path .. autoDownscalePreX4Path .. restoreCnnSoftPath .. upscaleCnnX2Path
-    local modeCACommand = upscaleDenoiseCnnX2Path .. autoDownscalePreX2Path .. autoDownscalePreX4Path .. restoreCnnPath .. upscaleCnnX2Path
+    local modeACommand = restoreCnnPath .. upscaleCnnX2Path .. autoDownscalePreX2Path .. autoDownscalePreX4Path .. upscaleCnnX2ndQuality
+    local modeBCommand = restoreCnnSoftPath .. upscaleCnnX2Path .. autoDownscalePreX2Path .. autoDownscalePreX4Path .. upscaleCnnX2ndQuality
+    local modeCCommand = upscaleDenoiseCnnX2Path .. autoDownscalePreX2Path .. autoDownscalePreX4Path .. upscaleCnnX2ndQuality
+    local modeAACommand = restoreCnnPath .. upscaleCnnX2Path .. restoreCnnPath .. autoDownscalePreX2Path .. autoDownscalePreX4Path .. upscaleCnnX2ndQuality
+    local modeBBCommand = restoreCnnSoftPath .. upscaleCnnX2Path .. autoDownscalePreX2Path .. autoDownscalePreX4Path .. restoreCnnSoftPath .. upscaleCnnX2ndQuality
+    local modeCACommand = upscaleDenoiseCnnX2Path .. autoDownscalePreX2Path .. autoDownscalePreX4Path .. restoreCnnPath .. upscaleCnnX2ndQuality
 
     -- Add details on primary mode string to finalize
     function getAnime4KFullCommand(primaryModeString, debugText)
