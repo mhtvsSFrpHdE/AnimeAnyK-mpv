@@ -164,7 +164,7 @@ function sendAnime4kCommand_jbgyampcwu()
         -- Treat 1440p as 1080p for now but anyway
         if useUserInputCommand
         then
-            finalCommand = userCommand2160P
+            finalCommand = userCommand1440P
             mp.command(finalCommand)
 
             return
