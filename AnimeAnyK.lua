@@ -8,8 +8,36 @@
 
 -- Use namespace "_jbgyampcwu" to avoid possible conflicts
 -- Rely on mp.utils functions, they may be removed in future mpv versions
+--
+-- Class reference: https://www.lua.org/pil/16.1.html
 
 
+
+-- Define Class: PlatformInformation
+-- Determine OS type and provide corresponding variable value
+PlatformInformation = {
+    -- https://mpv.io/manual/stable/#string-list-and-path-list-options
+    PathListSeparator = nil
+}
+function PlatformInformation:new (o, pathListSeparator)
+    o = o or {}
+    setmetatable(o, self)
+    self.__index = self
+
+    local osEnv = os.getenv("OS")
+    -- osEnv = ""
+
+    -- Windows 10
+    if osEnv == "Windows_NT"
+    then
+        self.PathListSeparator = pathListSeparator or ";"
+    -- All other OS goes here
+    else
+        self.PathListSeparator = pathListSeparator or ":"
+    end
+
+    return o
+end
 
 -- Return indicator file exist or not, and indicator file full path
 --
@@ -79,18 +107,20 @@ function sendAnime4kCommand_jbgyampcwu()
     --
 
     -- Const
+    local platformInformation = PlatformInformation:new()
+    local pathListSeparator = platformInformation.PathListSeparator
     local commandPrefixConst = "no-osd change-list glsl-shaders set "
-    local commandShowTextConst = "; show-text "
+    local commandShowTextConst = pathListSeparator .. " show-text "
     local commandShowTextContentConst = "Anime4K: Scripted"
 
     -- Shader path
-    local clampHighlightsPath = "~~/shaders/Anime4K_Clamp_Highlights.glsl;"
-    local restoreCnnPath = "~~/shaders/Anime4K_Restore_CNN_" .. restoreCnnQuality .. ".glsl;"
-    local restoreCnnSoftPath = "~~/shaders/Anime4K_Restore_CNN_Soft_" .. restoreCnnSoftQuality .. ".glsl;"
-    local upscaleCnnX2Path = "~~/shaders/Anime4K_Upscale_CNN_x2_" .. upscaleCnnX2Quality .. ".glsl;"
-    local upscaleDenoiseCnnX2Path = "~~/shaders/Anime4K_Upscale_Denoise_CNN_x2_" .. upscaleDenoiseCnnX2Quality .. ".glsl;"
-    local autoDownscalePreX2Path = "~~/shaders/Anime4K_AutoDownscalePre_x2.glsl;"
-    local autoDownscalePreX4Path = "~~/shaders/Anime4K_AutoDownscalePre_x4.glsl;"
+    local clampHighlightsPath = "~~/shaders/Anime4K_Clamp_Highlights.glsl" .. pathListSeparator
+    local restoreCnnPath = "~~/shaders/Anime4K_Restore_CNN_" .. restoreCnnQuality .. ".glsl" .. pathListSeparator
+    local restoreCnnSoftPath = "~~/shaders/Anime4K_Restore_CNN_Soft_" .. restoreCnnSoftQuality .. ".glsl" .. pathListSeparator
+    local upscaleCnnX2Path = "~~/shaders/Anime4K_Upscale_CNN_x2_" .. upscaleCnnX2Quality .. ".glsl" .. pathListSeparator
+    local upscaleDenoiseCnnX2Path = "~~/shaders/Anime4K_Upscale_Denoise_CNN_x2_" .. upscaleDenoiseCnnX2Quality .. ".glsl" .. pathListSeparator
+    local autoDownscalePreX2Path = "~~/shaders/Anime4K_AutoDownscalePre_x2.glsl" .. pathListSeparator
+    local autoDownscalePreX4Path = "~~/shaders/Anime4K_AutoDownscalePre_x4.glsl" .. pathListSeparator
 
     -- Generate Anime4K command
 
@@ -250,8 +280,12 @@ function inputCommandEvent_jbgyampcwu()
         -- Delete exist file, ignore possible delete error (happens on read only file system)
         local deleteResult, err = pcall(function () os.remove(indicatorFileFullPath) end)
 
+        -- Const
+        local platformInformation = PlatformInformation:new()
+        local pathListSeparator = platformInformation.PathListSeparator
+
         -- Clear glsl
-        mp.command("no-osd change-list glsl-shaders clr \"\"; show-text \"GLSL shaders cleared\"")
+        mp.command("no-osd change-list glsl-shaders clr \"\"" .. pathListSeparator .. "show-text \"GLSL shaders cleared\"")
     end
 end
 
