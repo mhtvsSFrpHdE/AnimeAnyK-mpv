@@ -2,6 +2,8 @@
 
 # AnimeAnyK-mpv
 
+The core idea is to send different inputs to mpv player depending on video resolution.
+
 Automatically turn on Anime4K in mpv player depending on video resolution.  
 Customize Anime4K command.  
 Remember Anime4K on/off status for other videos in the same folder.
