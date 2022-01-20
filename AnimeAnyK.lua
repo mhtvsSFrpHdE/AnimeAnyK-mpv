@@ -15,11 +15,11 @@
 
 -- Define Class: PlatformInformation
 -- Determine OS type and provide corresponding variable value
-PlatformInformation = {
+PlatformInformation_jbgyampcwu = {
     -- https://mpv.io/manual/stable/#string-list-and-path-list-options
     PathListSeparator = nil
 }
-function PlatformInformation:new (o, pathListSeparator)
+function PlatformInformation_jbgyampcwu:new (o, pathListSeparator)
     o = o or {}
     setmetatable(o, self)
     self.__index = self
@@ -107,7 +107,7 @@ function sendAnime4kCommand_jbgyampcwu()
     --
 
     -- Const
-    local platformInformation = PlatformInformation:new()
+    local platformInformation = PlatformInformation_jbgyampcwu:new()
     local pathListSeparator = platformInformation.PathListSeparator
     local commandPrefixConst = "no-osd change-list glsl-shaders set "
     local commandShowTextConst = pathListSeparator .. " show-text "
@@ -281,7 +281,7 @@ function inputCommandEvent_jbgyampcwu()
         local deleteResult, err = pcall(function () os.remove(indicatorFileFullPath) end)
 
         -- Const
-        local platformInformation = PlatformInformation:new()
+        local platformInformation = PlatformInformation_jbgyampcwu:new()
         local pathListSeparator = platformInformation.PathListSeparator
 
         -- Clear glsl
