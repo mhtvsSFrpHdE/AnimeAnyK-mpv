@@ -89,10 +89,10 @@ function sendAnime4kCommand_jbgyampcwu()
     -- See "Best Practices" section
     -- https://github.com/bloc97/Anime4K/blob/master/GLSL_Instructions.md
     local restoreCnnQuality = "M"
-    local restoreCnnSoftQuality = "S"
+    local restoreCnnSoftQuality = "M"
     local upscaleCnnX2Quality = "M"
-    local upscaleCnnX2ndQuality = "S"
-    local upscaleDenoiseCnnX2Quality = "S"
+    local upscaleCnnX2Quality_2 = "S"
+    local upscaleDenoiseCnnX2Quality = "M"
 
     local useClampHighlights = true
 
@@ -118,6 +118,7 @@ function sendAnime4kCommand_jbgyampcwu()
     local restoreCnnPath = "~~/shaders/Anime4K_Restore_CNN_" .. restoreCnnQuality .. ".glsl" .. pathListSeparator
     local restoreCnnSoftPath = "~~/shaders/Anime4K_Restore_CNN_Soft_" .. restoreCnnSoftQuality .. ".glsl" .. pathListSeparator
     local upscaleCnnX2Path = "~~/shaders/Anime4K_Upscale_CNN_x2_" .. upscaleCnnX2Quality .. ".glsl" .. pathListSeparator
+    local upscaleCnnX2Path_2 = "~~/shaders/Anime4K_Upscale_CNN_x2_" .. upscaleCnnX2Quality_2 .. ".glsl" .. pathListSeparator
     local upscaleDenoiseCnnX2Path = "~~/shaders/Anime4K_Upscale_Denoise_CNN_x2_" .. upscaleDenoiseCnnX2Quality .. ".glsl" .. pathListSeparator
     local autoDownscalePreX2Path = "~~/shaders/Anime4K_AutoDownscalePre_x2.glsl" .. pathListSeparator
     local autoDownscalePreX4Path = "~~/shaders/Anime4K_AutoDownscalePre_x4.glsl" .. pathListSeparator
@@ -125,12 +126,9 @@ function sendAnime4kCommand_jbgyampcwu()
     -- Generate Anime4K command
 
     -- Primary mode combinations
-    local modeACommand = restoreCnnPath .. upscaleCnnX2Path .. autoDownscalePreX2Path .. autoDownscalePreX4Path .. upscaleCnnX2ndQuality
-    local modeBCommand = restoreCnnSoftPath .. upscaleCnnX2Path .. autoDownscalePreX2Path .. autoDownscalePreX4Path .. upscaleCnnX2ndQuality
-    local modeCCommand = upscaleDenoiseCnnX2Path .. autoDownscalePreX2Path .. autoDownscalePreX4Path .. upscaleCnnX2ndQuality
-    local modeAACommand = restoreCnnPath .. upscaleCnnX2Path .. restoreCnnPath .. autoDownscalePreX2Path .. autoDownscalePreX4Path .. upscaleCnnX2ndQuality
-    local modeBBCommand = restoreCnnSoftPath .. upscaleCnnX2Path .. autoDownscalePreX2Path .. autoDownscalePreX4Path .. restoreCnnSoftPath .. upscaleCnnX2ndQuality
-    local modeCACommand = upscaleDenoiseCnnX2Path .. autoDownscalePreX2Path .. autoDownscalePreX4Path .. restoreCnnPath .. upscaleCnnX2ndQuality
+    local modeACommand = restoreCnnPath .. upscaleCnnX2Path .. autoDownscalePreX2Path .. autoDownscalePreX4Path .. upscaleCnnX2Path_2
+    local modeBCommand = restoreCnnSoftPath .. upscaleCnnX2Path .. autoDownscalePreX2Path .. autoDownscalePreX4Path .. upscaleCnnX2Path_2
+    local modeCCommand = upscaleDenoiseCnnX2Path .. autoDownscalePreX2Path .. autoDownscalePreX4Path .. upscaleCnnX2Path_2
 
     -- Add details on primary mode string to finalize
     function getAnime4KFullCommand(primaryModeString, debugText)
@@ -152,6 +150,8 @@ function sendAnime4kCommand_jbgyampcwu()
         -- Combine other parts together
         primaryModeString = commandPrefixConst .. "\"" .. primaryModeString .. "\"" .. commandShowTextConst .. "\"" .. commandShowTextContentConst .. debugText .. "\""
 
+        -- DEBUG
+        --print(primaryModeString)
         return primaryModeString
     end
 
@@ -168,6 +168,8 @@ function sendAnime4kCommand_jbgyampcwu()
     -- Get video height as int
     local videoHeightString = mp.get_property("height")
     local videoHeightInt = tonumber(videoHeightString)
+    -- DEBUG
+    --videoHeightInt = 1080
 
     -- Prepare final command, will send to mpv
     local finalCommand
