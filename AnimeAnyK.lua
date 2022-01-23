@@ -13,6 +13,28 @@
 
 
 
+-- Define Class: UserInput
+-- Override built-in Anime4K command for either early access to new version Anime4K
+-- or temporary workaround a discovered bug without waiting for AnimeAnyK to fix it
+UserInput_jbgyampcwu = {
+    -- Toggle user command mode
+    UseUserInputCommand = false,
+
+    -- If you have your own string, paste it here
+    --
+    -- For complex primary mode (AA or BB or CA, etc)
+    -- also paste it here and edit manually for customization.
+    UserCommand2160P = "",
+    UserCommand1440P = "",
+    UserCommand1080P = "",
+    UserCommand720P = "",
+    UserCommand480P = "",
+
+    -- Optional: Clamp_Highlights
+    -- https://github.com/bloc97/Anime4K/blob/master/GLSL_Instructions.md#best-practices
+    UseClampHighlights = true
+}
+
 -- Define Class: PlatformInformation
 -- Determine OS type and provide corresponding variable value
 PlatformInformation_jbgyampcwu = {
@@ -76,21 +98,6 @@ end
 
 -- Send Anime4K command to mpv
 function sendAnime4kCommand_jbgyampcwu()
-    --
-    -- BEGIN User input
-    --
-
-    -- If you have your own string, paste it here
-    -- For complex primary mode (AA or BB or CA, etc)
-    --   also paste it here and edit manually for customization.
-    local userCommand2160P = ""
-    local userCommand1440P = ""
-    local userCommand1080P = ""
-    local userCommand720P = ""
-    local userCommand480P = ""
-
-    local useUserInputCommand = false
-
     -- Anime4K profile preset
     -- See "Best Practices" section
     -- https://github.com/bloc97/Anime4K/blob/master/GLSL_Instructions.md
@@ -99,14 +106,6 @@ function sendAnime4kCommand_jbgyampcwu()
     local upscaleCnnX2Quality = "M"
     local upscaleCnnX2Quality_2 = "S"
     local upscaleDenoiseCnnX2Quality = "M"
-
-    local useClampHighlights = true
-
-    --
-    -- End User input
-    --
-
-
 
     --
     -- BEGIN Anime4K Command
@@ -145,7 +144,7 @@ function sendAnime4kCommand_jbgyampcwu()
         end
 
         -- Add ClampHighlights if possible
-        if useClampHighlights
+        if UserInput_jbgyampcwu.UseClampHighlights
         then
             primaryModeString = clampHighlightsPath .. primaryModeString
         end
@@ -184,9 +183,9 @@ function sendAnime4kCommand_jbgyampcwu()
     if videoHeightInt >= 2160
     then
         -- This is already a 4K video but anyway
-        if useUserInputCommand
+        if UserInput_jbgyampcwu.UseUserInputCommand
         then
-            finalCommand = userCommand2160P
+            finalCommand = UserInput_jbgyampcwu.UserCommand2160P
         else
             -- If no user command requested, then do nothing on this resolution
             return
@@ -200,9 +199,9 @@ function sendAnime4kCommand_jbgyampcwu()
     if videoHeightInt >= 1440
     then
         -- Treat 1440p as 1080p for now but anyway
-        if useUserInputCommand
+        if UserInput_jbgyampcwu.UseUserInputCommand
         then
-            finalCommand = userCommand1440P
+            finalCommand = UserInput_jbgyampcwu.UserCommand1440P
             mp.command(finalCommand)
 
             return
@@ -213,9 +212,9 @@ function sendAnime4kCommand_jbgyampcwu()
 
     if videoHeightInt >= 1080
     then
-        if useUserInputCommand
+        if UserInput_jbgyampcwu.UseUserInputCommand
         then
-            finalCommand = userCommand1080P
+            finalCommand = UserInput_jbgyampcwu.UserCommand1080P
         else
             finalCommand = getAnime4KFullCommand(modeACommand, " A")
         end
@@ -227,9 +226,9 @@ function sendAnime4kCommand_jbgyampcwu()
 
     if videoHeightInt >= 720
     then
-        if useUserInputCommand
+        if UserInput_jbgyampcwu.UseUserInputCommand
         then
-            finalCommand = userCommand720P
+            finalCommand = UserInput_jbgyampcwu.UserCommand720P
         else
             finalCommand = getAnime4KFullCommand(modeBCommand, " B")
         end
@@ -241,9 +240,9 @@ function sendAnime4kCommand_jbgyampcwu()
 
     if videoHeightInt < 720
     then
-        if useUserInputCommand
+        if UserInput_jbgyampcwu.UseUserInputCommand
         then
-            finalCommand = userCommand480P
+            finalCommand = UserInput_jbgyampcwu.UserCommand480P
         else
             finalCommand = getAnime4KFullCommand(modeCCommand, " C")
         end

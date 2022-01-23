@@ -49,9 +49,9 @@ AnimeAnyK won't do anything to prevent enabling Anime4K on non-anime videos.
 ### Custom Anime4K
 
 To customize Anime4K, use any text editor open the ".lua" file,  
-change variables inside "User input" section.
+change variables inside "UserInput" class.
 
-Once `useUserInputCommand` set to `true`,  
+Once `UseUserInputCommand` set to `true`,  
 AnimeAnyK will use user commands to replace built-in Anime4K commands.
 
 ### Confirm Anime4K enabled by script
