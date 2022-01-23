@@ -13,6 +13,10 @@
 
 
 
+--
+-- BEGIN Class
+--
+
 -- Define Class: UserInput
 -- Override built-in Anime4K command for either early access to new version Anime4K
 -- or temporary workaround a discovered bug without waiting for AnimeAnyK to fix it
@@ -115,10 +119,9 @@ function Core_jbgyampcwu.GetIndicatorFileStatus()
     end
 end
 
-
-
--- Send Anime4K command to mpv
-function sendAnime4kCommand_jbgyampcwu()
+-- Get Anime4K Command
+-- Different video resolution leads to different command results
+function Core_jbgyampcwu.GetAnime4KCommand(videoHeightInt)
     -- Anime4K profile preset
     -- See "Best Practices" section
     -- https://github.com/bloc97/Anime4K/blob/master/GLSL_Instructions.md
@@ -129,10 +132,8 @@ function sendAnime4kCommand_jbgyampcwu()
     local upscaleDenoiseCnnX2Quality = "M"
 
     --
-    -- BEGIN Anime4K Command
+    -- BEGIN Const
     --
-
-    -- Const
     local platformInformation = PlatformInformation_jbgyampcwu:new()
     local pathListSeparator = platformInformation.PathListSeparator
     local commandPrefixConst = "no-osd change-list glsl-shaders set "
@@ -149,51 +150,54 @@ function sendAnime4kCommand_jbgyampcwu()
     local autoDownscalePreX2Path = "~~/shaders/Anime4K_AutoDownscalePre_x2.glsl" .. pathListSeparator
     local autoDownscalePreX4Path = "~~/shaders/Anime4K_AutoDownscalePre_x4.glsl" .. pathListSeparator
 
-    -- Generate Anime4K command
+    --
+    -- END Cosnt
+    --
 
     -- Primary mode combinations
-    local modeACommand = restoreCnnPath .. upscaleCnnX2Path .. autoDownscalePreX2Path .. autoDownscalePreX4Path .. upscaleCnnX2Path_2
-    local modeBCommand = restoreCnnSoftPath .. upscaleCnnX2Path .. autoDownscalePreX2Path .. autoDownscalePreX4Path .. upscaleCnnX2Path_2
-    local modeCCommand = upscaleDenoiseCnnX2Path .. autoDownscalePreX2Path .. autoDownscalePreX4Path .. upscaleCnnX2Path_2
-
-    -- Add details on primary mode string to finalize
-    function getAnime4KFullCommand(primaryModeString, debugText)
-        -- Initialize debug text if not provided
-        if debugText == nil
+    function getPrimaryModeCombination()
+        -- Mode A
+        if videoHeightInt >= 1080
         then
-            debugText = ""
+            return restoreCnnPath .. upscaleCnnX2Path .. autoDownscalePreX2Path .. autoDownscalePreX4Path .. upscaleCnnX2Path_2, "A"
         end
 
-        -- Add ClampHighlights if possible
-        if UserInput_jbgyampcwu.UseClampHighlights
+        -- Mode B
+        if videoHeightInt >= 720
         then
-            primaryModeString = clampHighlightsPath .. primaryModeString
+            return restoreCnnSoftPath .. upscaleCnnX2Path .. autoDownscalePreX2Path .. autoDownscalePreX4Path .. upscaleCnnX2Path_2, "B"
         end
 
-        -- Remove last semicolon
-        primaryModeString = primaryModeString:sub(1, -2)
-
-        -- Combine other parts together
-        primaryModeString = commandPrefixConst .. "\"" .. primaryModeString .. "\"" .. commandShowTextConst .. "\"" .. commandShowTextContentConst .. debugText .. "\""
-
-        -- DEBUG
-        print(primaryModeString)
-        return primaryModeString
+        -- Mode C
+        if videoHeightInt < 720
+        then
+            return upscaleDenoiseCnnX2Path .. autoDownscalePreX2Path .. autoDownscalePreX4Path .. upscaleCnnX2Path_2, "C"
+        end
     end
 
-    --
-    -- END Anime4K Command
-    --
+    -- Get primary mode string
+    local primaryModeString, modeName = getPrimaryModeCombination()
 
+    -- Add ClampHighlights if possible
+    if UserInput_jbgyampcwu.UseClampHighlights
+    then
+        primaryModeString = clampHighlightsPath .. primaryModeString
+    end
 
+    -- Remove last semicolon
+    primaryModeString = primaryModeString:sub(1, -2)
 
-    --
-    -- BEGIN Analyze video
-    --
+    -- Combine other parts together
+    primaryModeString = commandPrefixConst .. "\"" .. primaryModeString .. "\"" .. commandShowTextConst .. "\"" .. commandShowTextContentConst .. modeName .. "\""
 
-    local videoHeightInt = Core_jbgyampcwu.GetVideoHeightInt()
     -- DEBUG
-    --videoHeightInt = 1080
+    --print(primaryModeString)
+    return primaryModeString
+end
+
+-- Send Anime4K command to mpv
+function Core_jbgyampcwu.SendAnime4kCommand()
+    local videoHeightInt = Core_jbgyampcwu.GetVideoHeightInt()
 
     -- Prepare final command, will send to mpv
     local finalCommand
@@ -217,7 +221,7 @@ function sendAnime4kCommand_jbgyampcwu()
 
     if videoHeightInt >= 1440
     then
-        -- Treat 1440p as 1080p for now but anyway
+        -- Treat 1440p as 1080p(no built-in command) for now
         if UserInput_jbgyampcwu.UseUserInputCommand
         then
             finalCommand = UserInput_jbgyampcwu.UserCommand1440P
@@ -225,56 +229,32 @@ function sendAnime4kCommand_jbgyampcwu()
 
             return
         end
-
-        -- If no user command requested, keep execute "if" statement chain
     end
 
-    if videoHeightInt >= 1080
+    -- Below 1440
+    if UserInput_jbgyampcwu.UseUserInputCommand
     then
-        if UserInput_jbgyampcwu.UseUserInputCommand
-        then
-            finalCommand = UserInput_jbgyampcwu.UserCommand1080P
-        else
-            finalCommand = getAnime4KFullCommand(modeACommand, " A")
-        end
-
-        mp.command(finalCommand)
-
-        return
+        finalCommand = UserInput_jbgyampcwu.UserCommand1080P
+    else
+        finalCommand = Core_jbgyampcwu.GetAnime4KCommand(videoHeightInt)
     end
 
-    if videoHeightInt >= 720
-    then
-        if UserInput_jbgyampcwu.UseUserInputCommand
-        then
-            finalCommand = UserInput_jbgyampcwu.UserCommand720P
-        else
-            finalCommand = getAnime4KFullCommand(modeBCommand, " B")
-        end
-
-        mp.command(finalCommand)
-
-        return
-    end
-
-    if videoHeightInt < 720
-    then
-        if UserInput_jbgyampcwu.UseUserInputCommand
-        then
-            finalCommand = UserInput_jbgyampcwu.UserCommand480P
-        else
-            finalCommand = getAnime4KFullCommand(modeCCommand, " C")
-        end
-
-        mp.command(finalCommand)
-
-        return
-    end
+    mp.command(finalCommand)
 
     --
     -- End Analyze video
     --
 end
+
+--
+-- END Class
+--
+
+
+
+--
+-- BEGIN Event
+--
 
 -- Video loaded event
 function videoLoadedEvent_jbgyampcwu(event)
@@ -283,7 +263,7 @@ function videoLoadedEvent_jbgyampcwu(event)
     then
         return
     else
-        sendAnime4kCommand_jbgyampcwu()
+        Core_jbgyampcwu.SendAnime4kCommand()
     end
 end
 
@@ -301,7 +281,7 @@ function inputCommandEvent_jbgyampcwu()
         local closeResult, err = pcall(function () file_object:close() end)
 
         -- Trigger scripted Anime4K
-        sendAnime4kCommand_jbgyampcwu()
+        Core_jbgyampcwu.SendAnime4kCommand()
     else
         -- Delete exist file, ignore possible delete error (happens on read only file system)
         local deleteResult, err = pcall(function () os.remove(indicatorFileFullPath) end)
@@ -311,18 +291,11 @@ function inputCommandEvent_jbgyampcwu()
     end
 end
 
--- Delay some code executing
--- May useful when OSD messaging
--- https://github.com/mpv-player/mpv/issues/6592
-function runFuntionButDelay_jbgyampcwu(myTime, myFunction)
-    mp.add_timeout
-    (
-        myTime,
-        function()
-            myFunction()
-        end
-    )
-end
+--
+-- END Event
+--
+
+
 
 mp.register_event("file-loaded", videoLoadedEvent_jbgyampcwu)
 mp.add_key_binding(nil, "toggle-anime4k-jbgyampcwu", inputCommandEvent_jbgyampcwu)
