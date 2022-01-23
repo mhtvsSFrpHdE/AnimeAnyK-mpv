@@ -155,28 +155,49 @@ function Core_jbgyampcwu.GetAnime4KCommand(videoHeightInt)
     --
 
     -- Primary mode combinations
-    function getPrimaryModeCombination()
+    function getPrimaryModeString()
         -- Mode A
         if videoHeightInt >= 1080
         then
+            if UserInput_jbgyampcwu.UseUserInputCommand
+            then
+                return UserInput_jbgyampcwu.UserCommand1080P
+            end
+
             return restoreCnnPath .. upscaleCnnX2Path .. autoDownscalePreX2Path .. autoDownscalePreX4Path .. upscaleCnnX2Path_2, "A"
         end
 
         -- Mode B
         if videoHeightInt >= 720
         then
+            if UserInput_jbgyampcwu.UseUserInputCommand
+            then
+                return UserInput_jbgyampcwu.UserCommand720P
+            end
+
             return restoreCnnSoftPath .. upscaleCnnX2Path .. autoDownscalePreX2Path .. autoDownscalePreX4Path .. upscaleCnnX2Path_2, "B"
         end
 
         -- Mode C
         if videoHeightInt < 720
         then
+            if UserInput_jbgyampcwu.UseUserInputCommand
+            then
+                return UserInput_jbgyampcwu.UserCommand480P
+            end
+
             return upscaleDenoiseCnnX2Path .. autoDownscalePreX2Path .. autoDownscalePreX4Path .. upscaleCnnX2Path_2, "C"
         end
     end
 
     -- Get primary mode string
-    local primaryModeString, modeName = getPrimaryModeCombination()
+    local primaryModeString, modeName = getPrimaryModeString()
+
+    -- Send user command as is
+    if UserInput_jbgyampcwu.UseUserInputCommand
+    then
+        return primaryModeString
+    end
 
     -- Add ClampHighlights if possible
     if UserInput_jbgyampcwu.UseClampHighlights
@@ -232,12 +253,7 @@ function Core_jbgyampcwu.SendAnime4kCommand()
     end
 
     -- Below 1440
-    if UserInput_jbgyampcwu.UseUserInputCommand
-    then
-        finalCommand = UserInput_jbgyampcwu.UserCommand1080P
-    else
-        finalCommand = Core_jbgyampcwu.GetAnime4KCommand(videoHeightInt)
-    end
+    finalCommand = Core_jbgyampcwu.GetAnime4KCommand(videoHeightInt)
 
     mp.command(finalCommand)
 
