@@ -72,6 +72,7 @@ Core_jbgyampcwu = {
     -- Automated test variable
     OverrideVideoHeight = nil
 }
+
 -- Get video height as int
 function Core_jbgyampcwu.GetVideoHeightInt()
     if Core_jbgyampcwu.OverrideVideoHeight
@@ -90,7 +91,7 @@ end
 -- Return value:
 --     bool: indicatorFileExist
 --     string: indicatorFileFullPath
-function getIndicatorFileStatus_jbgyampcwu()
+function Core_jbgyampcwu.GetIndicatorFileStatus()
     -- Require
     local mpUtils = require 'mp.utils'
 
@@ -113,6 +114,8 @@ function getIndicatorFileStatus_jbgyampcwu()
         return true, indicatorFileFullPath
     end
 end
+
+
 
 -- Send Anime4K command to mpv
 function sendAnime4kCommand_jbgyampcwu()
@@ -174,7 +177,7 @@ function sendAnime4kCommand_jbgyampcwu()
         primaryModeString = commandPrefixConst .. "\"" .. primaryModeString .. "\"" .. commandShowTextConst .. "\"" .. commandShowTextContentConst .. debugText .. "\""
 
         -- DEBUG
-        --print(primaryModeString)
+        print(primaryModeString)
         return primaryModeString
     end
 
@@ -275,7 +278,7 @@ end
 
 -- Video loaded event
 function videoLoadedEvent_jbgyampcwu(event)
-    local indicatorFileExist, _ = getIndicatorFileStatus_jbgyampcwu()
+    local indicatorFileExist, _ = Core_jbgyampcwu.GetIndicatorFileStatus()
     if indicatorFileExist == false
     then
         return
@@ -287,7 +290,7 @@ end
 -- Toggle on/off event
 function inputCommandEvent_jbgyampcwu()
     -- Get indicator file status
-    local indicatorFileExist, indicatorFileFullPath = getIndicatorFileStatus_jbgyampcwu()
+    local indicatorFileExist, indicatorFileFullPath = Core_jbgyampcwu.GetIndicatorFileStatus()
 
     if indicatorFileExist == false
     then
