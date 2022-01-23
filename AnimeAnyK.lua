@@ -67,6 +67,24 @@ function PlatformInformation_jbgyampcwu:new (o, pathListSeparator)
     return o
 end
 
+-- Define Class: Core
+Core_jbgyampcwu = {
+    -- Automated test variable
+    OverrideVideoHeight = nil
+}
+-- Get video height as int
+function Core_jbgyampcwu.GetVideoHeightInt()
+    if Core_jbgyampcwu.OverrideVideoHeight
+    then
+        return Core_jbgyampcwu.OverrideVideoHeight
+    end
+
+    local videoHeightString = mp.get_property("height")
+    local videoHeightInt = tonumber(videoHeightString)
+
+    return videoHeightInt
+end
+
 -- Return indicator file exist or not, and indicator file full path
 --
 -- Return value:
@@ -170,9 +188,7 @@ function sendAnime4kCommand_jbgyampcwu()
     -- BEGIN Analyze video
     --
 
-    -- Get video height as int
-    local videoHeightString = mp.get_property("height")
-    local videoHeightInt = tonumber(videoHeightString)
+    local videoHeightInt = Core_jbgyampcwu.GetVideoHeightInt()
     -- DEBUG
     --videoHeightInt = 1080
 
