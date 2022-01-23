@@ -16,7 +16,13 @@
 -- Define Class: PlatformInformation
 -- Determine OS type and provide corresponding variable value
 PlatformInformation_jbgyampcwu = {
+    -- Linux/Unix is ":", Windows is ";".
     -- https://mpv.io/manual/stable/#string-list-and-path-list-options
+    --
+    -- There is difference between path list separator and
+    -- "send multiple command at once" command separator.
+    -- Command separator is always ";".
+    -- https://mpv.io/manual/stable/#input-conf-syntax
     PathListSeparator = nil
 }
 function PlatformInformation_jbgyampcwu:new (o, pathListSeparator)
@@ -110,7 +116,7 @@ function sendAnime4kCommand_jbgyampcwu()
     local platformInformation = PlatformInformation_jbgyampcwu:new()
     local pathListSeparator = platformInformation.PathListSeparator
     local commandPrefixConst = "no-osd change-list glsl-shaders set "
-    local commandShowTextConst = pathListSeparator .. " show-text "
+    local commandShowTextConst = "; show-text "
     local commandShowTextContentConst = "Anime4K: Scripted"
 
     -- Shader path
@@ -282,12 +288,8 @@ function inputCommandEvent_jbgyampcwu()
         -- Delete exist file, ignore possible delete error (happens on read only file system)
         local deleteResult, err = pcall(function () os.remove(indicatorFileFullPath) end)
 
-        -- Const
-        local platformInformation = PlatformInformation_jbgyampcwu:new()
-        local pathListSeparator = platformInformation.PathListSeparator
-
         -- Clear glsl
-        mp.command("no-osd change-list glsl-shaders clr \"\"" .. pathListSeparator .. "show-text \"GLSL shaders cleared\"")
+        mp.command("no-osd change-list glsl-shaders clr \"\"; show-text \"GLSL shaders cleared\"")
     end
 end
 
