@@ -1,4 +1,4 @@
--- Tested on Anime4K version v4.0 and mpv-x86_64-20211219-git-fd63bf3
+-- Tested on Anime4K version v4.0.1 and mpv-x86_64-20211219-git-fd63bf3
 --
 -- Automatically turn on Anime4K depending on video resolution
 -- 2160P: Ignore, or send user command
