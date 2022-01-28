@@ -21,9 +21,19 @@ Test = {
 }
 function Test.Reset()
     Test.VideoHeightInt = nil
-    Test.VideoPath = "C:\\Video Files\\1.mp4"
     Test.IndicatorFileExist = nil
     Test.LastSendedCommand = nil
+
+    local osEnv = os.getenv("OS")
+
+    -- Windows 10
+    if osEnv == "Windows_NT"
+    then
+        Test.VideoPath = "C:\\Video Files\\1.mp4"
+    -- All other OS goes here
+    else
+        Test.VideoPath = "~/VideoFiles/1.mp4"
+    end
 end
 
 -- Define Class: mp
