@@ -8,6 +8,9 @@ Automatically turn on Anime4K in mpv player depending on video resolution.
 Customize Anime4K command for early access to new Anime4K version or bug workaround.  
 Remember Anime4K on/off status for other videos in the same folder.
 
+> **Note: I do hope to preserve Linux/Unix support, but I only run Windows PC.**  
+> **Please use code entry prepared in advance to test/fix error on Linux/Unix and pull your patch back.**
+
 ## How to use
 
 ### Install
