@@ -159,19 +159,19 @@ function Core_jbgyampcwu.GetAnime4KCommand(videoHeightInt)
         -- Mode A
         if videoHeightInt >= 1080
         then
-            return restoreCnnPath .. upscaleCnnX2Path .. autoDownscalePreX2Path .. autoDownscalePreX4Path .. upscaleCnnX2Path_2, "A"
+            return restoreCnnPath .. upscaleCnnX2Path .. autoDownscalePreX2Path .. autoDownscalePreX4Path .. upscaleCnnX2Path_2, " A (Fast)"
         end
 
         -- Mode B
         if videoHeightInt >= 720
         then
-            return restoreCnnSoftPath .. upscaleCnnX2Path .. autoDownscalePreX2Path .. autoDownscalePreX4Path .. upscaleCnnX2Path_2, "B"
+            return restoreCnnSoftPath .. upscaleCnnX2Path .. autoDownscalePreX2Path .. autoDownscalePreX4Path .. upscaleCnnX2Path_2, " B (Fast)"
         end
 
         -- Mode C
         if videoHeightInt < 720
         then
-            return upscaleDenoiseCnnX2Path .. autoDownscalePreX2Path .. autoDownscalePreX4Path .. upscaleCnnX2Path_2, "C"
+            return upscaleDenoiseCnnX2Path .. autoDownscalePreX2Path .. autoDownscalePreX4Path .. upscaleCnnX2Path_2, " C (Fast)"
         end
     end
 
