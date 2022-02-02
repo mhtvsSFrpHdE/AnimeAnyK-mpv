@@ -333,6 +333,183 @@ iyes480()
 -- BEGIN User command test
 --
 
+-- Indicator file already tested in common test
+
+function iuser2160()
+    if Test.FailedItemCount > 0
+    then
+        return
+    end
+
+    testName = "Test 2160P user command"
+    testTarget = "no-osd change-list glsl-shaders clr \"\"; show-text \"GLSL shaders cleared\""
+
+    Test.Reset()
+    Test.VideoHeightInt = 2160
+    Test.IndicatorFileExist = true
+
+    UserInput_jbgyampcwu.UserCommand2160P = testTarget
+    UserInput_jbgyampcwu.UseUserInputCommand = true
+
+    Test.VideoLoadedEventFunction()
+    if Test.LastSendedCommand ~= nil
+    then
+        if Test.LastSendedCommand == testTarget
+        then
+            print(testName .. testPassed)
+        else
+            local failedReason = "\n    Received command text mismatch with user settings.\n    LastSendedCommand: " .. Test.LastSendedCommand
+            table.insert(Test.FailedItem, testName .. testFailed .. failedReason)
+            Test.FailedItemCount = Test.FailedItemCount + 1
+        end
+    else
+        local failedReason = "\n    When indicator file exist, mp.command should run once.\n    LastSendedCommand: nil"
+        table.insert(Test.FailedItem, testName .. testFailed .. failedReason)
+        Test.FailedItemCount = Test.FailedItemCount + 1
+    end
+end
+iuser2160()
+
+function iuser1440()
+    if Test.FailedItemCount > 0
+    then
+        return
+    end
+
+    testName = "Test 1440P user command"
+    testTarget = "no-osd change-list glsl-shaders clr \"\"; show-text \"GLSL shaders cleared\""
+
+    Test.Reset()
+    Test.VideoHeightInt = 1440
+    Test.IndicatorFileExist = true
+
+    UserInput_jbgyampcwu.UserCommand1440P = testTarget
+    UserInput_jbgyampcwu.UseUserInputCommand = true
+
+    Test.VideoLoadedEventFunction()
+    if Test.LastSendedCommand ~= nil
+    then
+        if Test.LastSendedCommand == testTarget
+        then
+            print(testName .. testPassed)
+        else
+            local failedReason = "\n    Received command text mismatch with user settings.\n    LastSendedCommand: " .. Test.LastSendedCommand
+            table.insert(Test.FailedItem, testName .. testFailed .. failedReason)
+            Test.FailedItemCount = Test.FailedItemCount + 1
+        end
+    else
+        local failedReason = "\n    When indicator file exist, mp.command should run once.\n    LastSendedCommand: nil"
+        table.insert(Test.FailedItem, testName .. testFailed .. failedReason)
+        Test.FailedItemCount = Test.FailedItemCount + 1
+    end
+end
+iuser1440()
+
+function iuser1080()
+    if Test.FailedItemCount > 0
+    then
+        return
+    end
+
+    testName = "Test 1080P user command"
+    testTarget = "no-osd change-list glsl-shaders clr \"\"; show-text \"GLSL shaders cleared\""
+
+    Test.Reset()
+    Test.VideoHeightInt = 1080
+    Test.IndicatorFileExist = true
+
+    UserInput_jbgyampcwu.UserCommand1080P = testTarget
+    UserInput_jbgyampcwu.UseUserInputCommand = true
+
+    Test.VideoLoadedEventFunction()
+    if Test.LastSendedCommand ~= nil
+    then
+        if Test.LastSendedCommand == testTarget
+        then
+            print(testName .. testPassed)
+        else
+            local failedReason = "\n    Received command text mismatch with user settings.\n    LastSendedCommand: " .. Test.LastSendedCommand
+            table.insert(Test.FailedItem, testName .. testFailed .. failedReason)
+            Test.FailedItemCount = Test.FailedItemCount + 1
+        end
+    else
+        local failedReason = "\n    When indicator file exist, mp.command should run once.\n    LastSendedCommand: nil"
+        table.insert(Test.FailedItem, testName .. testFailed .. failedReason)
+        Test.FailedItemCount = Test.FailedItemCount + 1
+    end
+end
+iuser1080()
+
+function iuser720()
+    if Test.FailedItemCount > 0
+    then
+        return
+    end
+
+    testName = "Test 720P user command"
+    testTarget = "no-osd change-list glsl-shaders clr \"\"; show-text \"GLSL shaders cleared\""
+
+    Test.Reset()
+    Test.VideoHeightInt = 720
+    Test.IndicatorFileExist = true
+
+    UserInput_jbgyampcwu.UserCommand720P = testTarget
+    UserInput_jbgyampcwu.UseUserInputCommand = true
+
+    Test.VideoLoadedEventFunction()
+    if Test.LastSendedCommand ~= nil
+    then
+        if Test.LastSendedCommand == testTarget
+        then
+            print(testName .. testPassed)
+        else
+            local failedReason = "\n    Received command text mismatch with user settings.\n    LastSendedCommand: " .. Test.LastSendedCommand
+            table.insert(Test.FailedItem, testName .. testFailed .. failedReason)
+            Test.FailedItemCount = Test.FailedItemCount + 1
+        end
+    else
+        local failedReason = "\n    When indicator file exist, mp.command should run once.\n    LastSendedCommand: nil"
+        table.insert(Test.FailedItem, testName .. testFailed .. failedReason)
+        Test.FailedItemCount = Test.FailedItemCount + 1
+    end
+end
+iuser720()
+
+function iuser480()
+    if Test.FailedItemCount > 0
+    then
+        return
+    end
+
+    testName = "Test 480P user command"
+    testTarget = "no-osd change-list glsl-shaders clr \"\"; show-text \"GLSL shaders cleared\""
+
+    Test.Reset()
+    Test.VideoHeightInt = 480
+    Test.IndicatorFileExist = true
+
+    UserInput_jbgyampcwu.UserCommand480P = testTarget
+    UserInput_jbgyampcwu.UseUserInputCommand = true
+
+    Test.VideoLoadedEventFunction()
+    if Test.LastSendedCommand ~= nil
+    then
+        if Test.LastSendedCommand == testTarget
+        then
+            print(testName .. testPassed)
+        else
+            local failedReason = "\n    Received command text mismatch with user settings.\n    LastSendedCommand: " .. Test.LastSendedCommand
+            table.insert(Test.FailedItem, testName .. testFailed .. failedReason)
+            Test.FailedItemCount = Test.FailedItemCount + 1
+        end
+    else
+        local failedReason = "\n    When indicator file exist, mp.command should run once.\n    LastSendedCommand: nil"
+        table.insert(Test.FailedItem, testName .. testFailed .. failedReason)
+        Test.FailedItemCount = Test.FailedItemCount + 1
+    end
+end
+iuser480()
+
 --
 -- END User command test
 --
