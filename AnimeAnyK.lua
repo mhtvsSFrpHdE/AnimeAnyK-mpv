@@ -203,61 +203,56 @@ function Core_jbgyampcwu.SendAnime4kCommand()
     local finalCommand
 
     -- Enable different Anime4K combinations by video height
-    if videoHeightInt >= 2160
+    if UserInput_jbgyampcwu.UseUserInputCommand
     then
-        -- This is already a 4K video but anyway
-        if UserInput_jbgyampcwu.UseUserInputCommand
+        if videoHeightInt >= 2160
         then
             finalCommand = UserInput_jbgyampcwu.UserCommand2160P
-        else
-            -- If no user command requested, then do nothing on this resolution
+            mp.command(finalCommand)
+
             return
         end
 
-        mp.command(finalCommand)
-
-        return
-    end
-
-    -- Treat 1440p as 1080p(no built-in command) for now
-    if videoHeightInt >= 1440 and UserInput_jbgyampcwu.UseUserInputCommand
-    then
-        if UserInput_jbgyampcwu.UseUserInputCommand
+        if videoHeightInt >= 1440
         then
             finalCommand = UserInput_jbgyampcwu.UserCommand1440P
             mp.command(finalCommand)
 
             return
         end
+
+        if videoHeightInt >= 1080
+        then
+            finalCommand = UserInput_jbgyampcwu.UserCommand1080P
+            mp.command(finalCommand)
+
+            return
+        end
+
+        if videoHeightInt >= 720
+        then
+            finalCommand = UserInput_jbgyampcwu.UserCommand720P
+            mp.command(finalCommand)
+
+            return
+        end
+
+        if videoHeightInt < 720
+        then
+            finalCommand = UserInput_jbgyampcwu.UserCommand480P
+            mp.command(finalCommand)
+
+            return
+        end
+    -- If no user command requested, then do nothing on 2160p
+    -- Treat <2160p as 1080p(no built-in command) for now
+    else
+        if videoHeightInt < 2160
+        then
+            finalCommand = Core_jbgyampcwu.GetAnime4KCommand(videoHeightInt)
+            mp.command(finalCommand)
+        end
     end
-
-    if videoHeightInt >= 1080 and UserInput_jbgyampcwu.UseUserInputCommand
-    then
-        finalCommand = UserInput_jbgyampcwu.UserCommand1080P
-        mp.command(finalCommand)
-
-        return
-    end
-
-    if videoHeightInt >= 720 and UserInput_jbgyampcwu.UseUserInputCommand
-    then
-        finalCommand = UserInput_jbgyampcwu.UserCommand720P
-        mp.command(finalCommand)
-
-        return
-    end
-
-    if videoHeightInt < 720 and UserInput_jbgyampcwu.UseUserInputCommand
-    then
-        finalCommand = UserInput_jbgyampcwu.UserCommand480P
-        mp.command(finalCommand)
-
-        return
-    end
-
-    -- Below 1440 and user command false
-    finalCommand = Core_jbgyampcwu.GetAnime4KCommand(videoHeightInt)
-    mp.command(finalCommand)
 
     --
     -- End Analyze video
