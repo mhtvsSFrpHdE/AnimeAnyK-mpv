@@ -323,6 +323,54 @@ function iyes480()
 end
 iyes480()
 
+-- Assume iyes tests passed
+-- Only one resolution needed unless one day code become hardcoded
+function inoclamp()
+    if Test.FailedItemCount > 0
+    then
+        return
+    end
+
+    testName = "Test no Clamp_Highlights"
+    testTarget = "no-osd change-list glsl-shaders set \"~~/shaders/Anime4K_Restore_CNN_M.glsl;~~/shaders/Anime4K_Upscale_CNN_x2_M.glsl;~~/shaders/Anime4K_AutoDownscalePre_x2.glsl;~~/shaders/Anime4K_AutoDownscalePre_x4.glsl;~~/shaders/Anime4K_Upscale_CNN_x2_S.glsl\"; show-text \"Anime4K: Scripted A (Fast)\""
+
+    Test.Reset()
+    Test.VideoHeightInt = 1080
+    Test.IndicatorFileExist = true
+
+    UserInput_jbgyampcwu.UseClampHighlights = false
+
+    Test.VideoLoadedEventFunction()
+    if Test.LastSendedCommand ~= nil
+    then
+        if Test.LastSendedCommand == testTarget
+        then
+            os.remove("inoclamp_command.txt")
+            os.remove("inoclamp_target.txt")
+            print(testName .. testPassed)
+        else
+            local inoclamp_command = io.open("inoclamp_command.txt", "w")
+            inoclamp_command:write(Test.LastSendedCommand)
+            inoclamp_command:close()
+
+            local inoclamp_target = io.open("inoclamp_target.txt", "w")
+            inoclamp_target:write(testTarget)
+            inoclamp_target:close()
+
+            local failedReason = "\n    Generated command text mismatch with official.\n    Command saved to: inoclamp*.txt"
+            table.insert(Test.FailedItem, testName .. testFailed .. failedReason)
+            Test.FailedItemCount = Test.FailedItemCount + 1
+        end
+    else
+        os.remove("inoclamp_command.txt")
+        os.remove("inoclamp_target.txt")
+        local failedReason = "\n    When indicator file exist, mp.command should run once.\n    LastSendedCommand: nil"
+        table.insert(Test.FailedItem, testName .. testFailed .. failedReason)
+        Test.FailedItemCount = Test.FailedItemCount + 1
+    end
+end
+inoclamp()
+
 --
 -- END Common test
 --
