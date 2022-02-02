@@ -24,6 +24,12 @@ function Test.Reset()
     Test.IndicatorFileExist = nil
     Test.LastSendedCommand = nil
 
+    UserInput_jbgyampcwu.UserCommand2160P = ""
+    UserInput_jbgyampcwu.UserCommand1440P = ""
+    UserInput_jbgyampcwu.UserCommand1080P = ""
+    UserInput_jbgyampcwu.UserCommand720P = ""
+    UserInput_jbgyampcwu.UserCommand480P = ""
+
     local osEnv = os.getenv("OS")
 
     -- Windows 10
