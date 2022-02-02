@@ -293,7 +293,6 @@ function iyes480()
     Test.IndicatorFileExist = true
 
     Test.VideoLoadedEventFunction()
-    Test.LastSendedCommand = nil
     if Test.LastSendedCommand ~= nil
     then
         if Test.LastSendedCommand == testTarget
