@@ -79,6 +79,39 @@ testFailed = ": Failed"
 -- BEGIN Binding test
 --
 
+function bindVideoLoad()
+    testName = "Test bind video loaded event"
+
+    if Test.VideoLoadedEventFunction == nil
+    then
+        local failedReason = "\n    Video loaded event not bind\n    VideoLoadedEventFunction: nil"
+        table.insert(Test.FailedItem, testName .. testFailed .. failedReason)
+        Test.FailedItemCount = Test.FailedItemCount + 1
+    else
+        print(testName .. testPassed)
+    end
+end
+bindVideoLoad()
+
+function bindInputCommand()
+    if Test.FailedItemCount > 0
+    then
+        return
+    end
+
+    testName = "Test bind toggle keypress event"
+
+    if Test.InputCommandEventFunction == nil
+    then
+        local failedReason = "\n    Toggle on/off event not bind\n    InputCommandEventFunction: nil"
+        table.insert(Test.FailedItem, testName .. testFailed .. failedReason)
+        Test.FailedItemCount = Test.FailedItemCount + 1
+    else
+        print(testName .. testPassed)
+    end
+end
+bindInputCommand()
+
 --
 -- END Binding test
 --
@@ -90,6 +123,11 @@ testFailed = ": Failed"
 --
 
 function ino1080()
+    if Test.FailedItemCount > 0
+    then
+        return
+    end
+
     testName = "Test 1080P with indicator file NOT exist"
 
     Test.Reset()
@@ -108,6 +146,11 @@ end
 ino1080()
 
 function ino720()
+    if Test.FailedItemCount > 0
+    then
+        return
+    end
+
     testName = "Test 720P with indicator file NOT exist"
 
     Test.Reset()
@@ -126,6 +169,11 @@ end
 ino720()
 
 function ino480()
+    if Test.FailedItemCount > 0
+    then
+        return
+    end
+
     testName = "Test 480P with indicator file NOT exist"
 
     Test.Reset()
@@ -144,6 +192,11 @@ end
 ino480()
 
 function iyes1080()
+    if Test.FailedItemCount > 0
+    then
+        return
+    end
+
     testName = "Test 1080P with indicator file exist"
     testTarget = "no-osd change-list glsl-shaders set \"~~/shaders/Anime4K_Clamp_Highlights.glsl;~~/shaders/Anime4K_Restore_CNN_M.glsl;~~/shaders/Anime4K_Upscale_CNN_x2_M.glsl;~~/shaders/Anime4K_AutoDownscalePre_x2.glsl;~~/shaders/Anime4K_AutoDownscalePre_x4.glsl;~~/shaders/Anime4K_Upscale_CNN_x2_S.glsl\"; show-text \"Anime4K: Scripted A (Fast)\""
 
@@ -183,6 +236,11 @@ end
 iyes1080()
 
 function iyes720()
+    if Test.FailedItemCount > 0
+    then
+        return
+    end
+
     testName = "Test 720P with indicator file exist"
     testTarget = "no-osd change-list glsl-shaders set \"~~/shaders/Anime4K_Clamp_Highlights.glsl;~~/shaders/Anime4K_Restore_CNN_Soft_M.glsl;~~/shaders/Anime4K_Upscale_CNN_x2_M.glsl;~~/shaders/Anime4K_AutoDownscalePre_x2.glsl;~~/shaders/Anime4K_AutoDownscalePre_x4.glsl;~~/shaders/Anime4K_Upscale_CNN_x2_S.glsl\"; show-text \"Anime4K: Scripted B (Fast)\""
 
@@ -222,6 +280,11 @@ end
 iyes720()
 
 function iyes480()
+    if Test.FailedItemCount > 0
+    then
+        return
+    end
+
     testName = "Test 480P with indicator file exist"
     testTarget = "no-osd change-list glsl-shaders set \"~~/shaders/Anime4K_Clamp_Highlights.glsl;~~/shaders/Anime4K_Upscale_Denoise_CNN_x2_M.glsl;~~/shaders/Anime4K_AutoDownscalePre_x2.glsl;~~/shaders/Anime4K_AutoDownscalePre_x4.glsl;~~/shaders/Anime4K_Upscale_CNN_x2_S.glsl\"; show-text \"Anime4K: Scripted C (Fast)\""
 
