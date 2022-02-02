@@ -15,7 +15,7 @@ Remember Anime4K on/off status for other videos in the same folder.
 
 ### Install
 
-Minimum recommended AnyK version is `1.1.4 release`.
+Minimum recommended AnyK version is `1.1.8 release`.
 
 Download and put Lua script into your mpv script folder,  
 put Anime4K files to your mpv shader folder like this:
