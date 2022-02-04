@@ -29,6 +29,7 @@ function Test.Reset()
     UserInput_jbgyampcwu.UserCommand1080P = ""
     UserInput_jbgyampcwu.UserCommand720P = ""
     UserInput_jbgyampcwu.UserCommand480P = ""
+    UserInput_jbgyampcwu.UseUserInputCommand = false
 
     local osEnv = os.getenv("OS")
 
