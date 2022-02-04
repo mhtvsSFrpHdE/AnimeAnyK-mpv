@@ -73,17 +73,10 @@ end
 
 -- Define Class: Core
 Core_jbgyampcwu = {
-    -- Automated test variable
-    OverrideVideoHeight = nil
 }
 
 -- Get video height as int
 function Core_jbgyampcwu.GetVideoHeightInt()
-    if Core_jbgyampcwu.OverrideVideoHeight
-    then
-        return Core_jbgyampcwu.OverrideVideoHeight
-    end
-
     local videoHeightString = mp.get_property("height")
     local videoHeightInt = tonumber(videoHeightString)
 
