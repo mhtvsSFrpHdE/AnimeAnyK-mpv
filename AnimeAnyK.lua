@@ -21,6 +21,8 @@
 -- Override built-in Anime4K command for either early access to new version Anime4K
 -- or temporary workaround a discovered bug without waiting for AnimeAnyK to fix it
 UserInput_jbgyampcwu = {
+    -- Turn on Anime4K globally, instead of use indicator file
+    AlwaysOn = false,
     -- Toggle user command mode
     UseUserInputCommand = false,
 
@@ -101,6 +103,17 @@ function Core_jbgyampcwu.GetIndicatorFileStatus()
 
     -- Fill parent folder
     local indicatorFileFullPath = mpUtils.join_path(fileParentFolder, indicatorFileName)
+
+    -- When AlwaysOn enabled, assume shader already loaded
+    -- Report true on first press (should clear GLSL at this time)
+    --
+    -- Remove "always on" status at same time
+    --     so 2nd and future request could cycle as usual (should be able to add GLSL back)
+    if UserInput_jbgyampcwu.AlwaysOn
+    then
+        UserInput_jbgyampcwu.AlwaysOn = false
+        return true, indicatorFileFullPath
+    end
 
     -- Try indicator file exist
     local indicatorFileExist, _ = mpUtils.file_info(indicatorFileFullPath)
@@ -264,6 +277,12 @@ end
 
 -- Video loaded event
 function videoLoadedEvent_jbgyampcwu(event)
+    if UserInput_jbgyampcwu.AlwaysOn
+    then
+        Core_jbgyampcwu.SendAnime4kCommand()
+        return
+    end
+
     local indicatorFileExist, _ = Core_jbgyampcwu.GetIndicatorFileStatus()
     if indicatorFileExist == false
     then

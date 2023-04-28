@@ -30,6 +30,7 @@ function Test.Reset()
     UserInput_jbgyampcwu.UserCommand720P = ""
     UserInput_jbgyampcwu.UserCommand480P = ""
     UserInput_jbgyampcwu.UseUserInputCommand = false
+    UserInput_jbgyampcwu.UseClampHighlights = true
 
     local osEnv = os.getenv("OS")
 
@@ -567,6 +568,60 @@ iuser480()
 
 --
 -- END User command test
+--
+
+
+
+--
+-- BEGIN Always on test
+--
+
+-- Other resolution already tested in common test
+
+function ialwaysOn()
+    if Test.FailedItemCount > 0
+    then
+        return
+    end
+
+    testName = "Test AlwaysOn with 480P"
+    testTarget = "no-osd change-list glsl-shaders set \"~~/shaders/Anime4K_Clamp_Highlights.glsl;~~/shaders/Anime4K_Upscale_Denoise_CNN_x2_M.glsl;~~/shaders/Anime4K_AutoDownscalePre_x2.glsl;~~/shaders/Anime4K_AutoDownscalePre_x4.glsl;~~/shaders/Anime4K_Upscale_CNN_x2_S.glsl\"; show-text \"Anime4K: Scripted C (Fast)\""
+
+    Test.Reset()
+    Test.VideoHeightInt = 480
+    Test.IndicatorFileExist = false
+
+    UserInput_jbgyampcwu.AlwaysOn = true
+
+    Test.VideoLoadedEventFunction()
+    if Test.LastSendedCommand ~= nil
+    then
+        if UserInput_jbgyampcwu.AlwaysOn == true
+        then
+        else
+            local failedReason = "\n    After video loaded event, AlwaysOn not remains true.\n    UserInput_jbgyampcwu.AlwaysOn: " .. tostring(Test.LastSendedCommand)
+            table.insert(Test.FailedItem, testName .. testFailed .. failedReason)
+            Test.FailedItemCount = Test.FailedItemCount + 1
+        end
+
+        if Test.LastSendedCommand == testTarget
+        then
+            print(testName .. testPassed)
+        else
+            local failedReason = "\n    Received command text mismatch with 480P target.\n    LastSendedCommand: " .. Test.LastSendedCommand
+            table.insert(Test.FailedItem, testName .. testFailed .. failedReason)
+            Test.FailedItemCount = Test.FailedItemCount + 1
+        end
+    else
+        local failedReason = "\n    AlwaysOn enabled, but command not run.\n    LastSendedCommand: nil"
+        table.insert(Test.FailedItem, testName .. testFailed .. failedReason)
+        Test.FailedItemCount = Test.FailedItemCount + 1
+    end
+end
+ialwaysOn()
+
+--
+-- END Always on test
 --
 
 
